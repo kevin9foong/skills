@@ -136,6 +136,16 @@ This is built in to every layer of these skills:
 
 And crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) helps you rescue a codebase that has become a ball of mud. I recommend running it on your codebase once every few days.
 
+### #5: Reviewing code is the bottleneck 
+
+**The Problem**: With AI, code production becomes less of the bottlneck. Instead, getting reviewers to understand, verify and evaluate software design decisions becomes the limit. 
+
+**The Fix**: 
+To aid in understanding & verifying:
+- practice review-by-commit, following a logical flow of commits which are scoped
+- provide the rationale of code changes, its alternatives and rationale between choosing this approach to help with evaluating software design decisions. 
+- For frontend changes: produce screenshots of the changes and its user journey (if any)
+
 ### Summary
 
 Software engineering fundamentals matter more than ever. These skills are my best effort at condensing these fundamentals into repeatable practices, to help you ship the best apps of your career. Enjoy.
@@ -156,6 +166,9 @@ Skills I use daily for code work.
 - **[to-prd](./skills/engineering/to-prd/SKILL.md)** — Turn the current conversation context into a PRD and submit it as a GitHub issue. No interview — just synthesizes what you've already discussed.
 - **[zoom-out](./skills/engineering/zoom-out/SKILL.md)** — Tell the agent to zoom out and give broader context or a higher-level perspective on an unfamiliar section of code.
 - **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to flesh out a design — either a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route.
+- **[prepare-for-review](./skills/engineering/prepare-for-review/SKILL.md)** — Umbrella skill that prepares a branch for Review-by-commit. Creates the PR if needed, then populates it with a commit walkthrough and frontend screenshots in one command.
+- **[walkthrough-commits](./skills/engineering/walkthrough-commits/SKILL.md)** — Render a commit-by-commit walkthrough section into the PR description so reviewers can follow the refactor-then-feature sequence. Composable — invokable standalone or via `prepare-for-review`.
+- **[screenshot-views](./skills/engineering/screenshot-views/SKILL.md)** — Capture single-shot Playwright screenshots of changed frontend views and embed them in the PR description. Composable — invokable standalone or via `prepare-for-review`.
 
 ### Productivity
 

@@ -29,6 +29,7 @@ Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an
 - Each slice delivers a narrow but COMPLETE path through every layer (schema, API, UI, tests)
 - A completed slice is demoable or verifiable on its own
 - Prefer many thin slices over few thick ones
+- Each slice should be sized so its eventual PR fits **Review-by-commit** — typically 1–7 **scoped commits** in **refactor-then-feature** order. Slices that would produce thicker PRs should be split further.
 </vertical-slice-rules>
 
 ### 4. Quiz the user

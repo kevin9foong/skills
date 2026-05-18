@@ -12,3 +12,6 @@ Skills I use daily for code work.
 - **[to-prd](./to-prd/SKILL.md)** — Turn the current conversation context into a PRD and submit it as a GitHub issue.
 - **[zoom-out](./zoom-out/SKILL.md)** — Tell the agent to zoom out and give broader context or a higher-level perspective on an unfamiliar section of code.
 - **[prototype](./prototype/SKILL.md)** — Build a throwaway prototype to flesh out a design — either a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route.
+- **[prepare-for-review](./prepare-for-review/SKILL.md)** — Umbrella skill that prepares a branch for Review-by-commit: creates the PR and populates it with a commit walkthrough and frontend screenshots.
+- **[walkthrough-commits](./walkthrough-commits/SKILL.md)** — Render a commit-by-commit walkthrough into the PR description. Composable sub-skill of `prepare-for-review`.
+- **[screenshot-views](./screenshot-views/SKILL.md)** — Capture Playwright screenshots of changed frontend views and embed them in the PR description. Composable sub-skill of `prepare-for-review`.

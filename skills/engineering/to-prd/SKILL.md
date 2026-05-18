@@ -15,6 +15,8 @@ The issue tracker and triage label vocabulary should have been provided to you â
 
 A deep module (as opposed to a shallow module) is one which encapsulates a lot of functionality in a simple, testable interface which rarely changes.
 
+Anticipate that the PRD will be sliced downstream by `to-issues` into vertical slices sized to fit **Review-by-commit** â€” keep module boundaries thin enough that each slice will produce a PR reviewable commit-by-commit.
+
 Check with the user that these modules match their expectations. Check with the user which modules they want tests written for.
 
 3. Write the PRD using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
