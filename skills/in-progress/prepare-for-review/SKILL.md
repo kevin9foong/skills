@@ -42,37 +42,56 @@ If any of the three is missing entirely, note it and continue — the correspond
 
 ### 3. Assemble the PR body
 
-The house template — sections always in this order; any sub-section whose source is empty is omitted entirely:
+The body must be **concise**. Reviewers skim — long bodies get ignored. Prefer plain language over jargon: write for someone who knows the product but not this specific change. If you need a domain term, the project's `CONTEXT.md` glossary defines the canonical ones; anything outside that list is suspect.
+
+Section order is fixed. Any sub-section whose source is empty is **omitted entirely** — no "N/A", no placeholder.
 
 ```md
 ## Problem
-<from PRD/issue's Problem Statement, lifted verbatim or lightly trimmed>
+
+<2–4 sentences from the PRD/issue. End with "Closes <issue-ref>" if there is one.>
 
 ## Solution
-<one-paragraph synthesis of the approach, drawn from the ADRs you collected
-in step 2 and the high-level shape of the diff. Don't invent rationale —
-if there are no ADRs in the touched area and no breadcrumbs, keep this
-paragraph factual and short.>
+
+<short prose paragraph — what changed and why, at the level a teammate
+would explain it in standup. Use ### sub-headings only if the change
+has genuinely separate facets (e.g. ### Feature flagging, ### Migration).
+Don't pad with restated context.>
 
 **Alternatives considered**
-<bulleted list. Each bullet is one breadcrumb with kind: pr-body,
-or one ADR's "considered options" section. Omit this sub-section
-entirely if both sources are empty.>
+<bulleted list. Each bullet = one breadcrumb with kind: pr-body, or one
+ADR's rejected option. Keep each bullet to one sentence. Omit the
+sub-section entirely if both sources are empty.>
 
 **Breaking Changes**
-<Yes or No. If yes, list the breaking changes and any migration steps.
-Take this from the PRD's Breaking Changes section if it has one,
-otherwise infer cautiously from the diff and flag uncertainty.>
+
+<One line. "No - backwards compatible." or "Yes - <what breaks> + <migration step>".>
 
 ## Tests
-<test plan checklist from PRD/issue. If the PRD has a Tests section,
-copy its checklist. If not, omit this section.>
+
+<Grouped manual test cases. Each group has a bold title summarising
+the scenario; the steps are a nested checklist. Pre-tick boxes the
+author has already verified locally.>
+
+**TC1: <scenario>**
+
+- [ ] <step>
+- [ ] <step>
+
+**TC2: <scenario>**
+
+- [ ] <step>
 
 ## Review guide
+
 1. `<short-sha>` — <commit subject>
 2. `<short-sha>` — <commit subject>
 ...
 ```
+
+**Sourcing the Tests section.** Prefer the PRD's own Tests block if it is already in this TC-grouped format. Otherwise build TCs from the user-journey or acceptance-criteria sections of the PRD/issue, one TC per distinct scenario the change enables. If the PRD has no testable scenarios at all (rare — only for pure docs PRs), omit the section.
+
+**Length budget.** Aim for the whole body to fit on one screen without scrolling for a reader on a 13" laptop. If you're over, the Solution paragraph is the first thing to cut — most reviewers will read the diff for the "how" anyway.
 
 For frontend changes (detection + capture covered in step 3a below), the body gains a **Screenshots** sub-section slotted between **Alternatives considered** and **Breaking Changes**:
 
