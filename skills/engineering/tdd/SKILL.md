@@ -44,7 +44,7 @@ RIGHT (vertical):
 
 ### 1. Planning
 
-When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching.
+When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching. Follow the project's commit style when committing through the loop, and the project's breadcrumb convention when capturing in-impl decisions for later review — both are documented in the project's agent docs if the project uses them.
 
 Before writing any code:
 
@@ -106,4 +106,12 @@ After all tests pass, look for [refactor candidates](refactoring.md):
 [ ] Test would survive internal refactor
 [ ] Code is minimal for this test
 [ ] No speculative features added
+[ ] Commit follows the project's commit style (one logical change per commit)
+[ ] Any non-obvious in-impl decision is captured as a breadcrumb
 ```
+
+## Breadcrumbs
+
+On a non-obvious in-impl choice, append an entry to `.scratch/<feature>/decisions.md` per the project's breadcrumb convention. Skip mechanical or obvious choices — noise makes reviewers stop reading. Big architectural calls belong in an ADR, not a breadcrumb.
+
+When the loop ends, the next step is `/prepare-for-review`.

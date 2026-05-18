@@ -15,6 +15,10 @@ _Avoid_: ticket (use only when quoting external systems that call them tickets)
 **Triage role**:
 A canonical state-machine label applied to an **Issue** during triage (e.g. `needs-triage`, `ready-for-afk`). Each role maps to a real label string in the **Issue tracker** via `docs/agents/triage-labels.md`.
 
+**Breadcrumb**:
+An author-written decision note dropped during implementation, capturing a small in-impl judgment call (the choice, alternatives considered, optional file:line anchor) that's too narrow for an **ADR**. Lives in `.scratch/<feature>/decisions.md` in the consuming repo. Consumed by `prepare-for-review` to populate PR body and inline review comments without re-deriving rationale from the diff.
+_Avoid_: "decision log entry" (overlaps with ADR), "comment" (overlaps with code comment / PR comment)
+
 ## Relationships
 
 - An **Issue tracker** holds many **Issues**
