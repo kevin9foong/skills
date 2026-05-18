@@ -60,8 +60,10 @@ Don't pad with restated context.>
 
 **Alternatives considered**
 <bulleted list. Each bullet = one breadcrumb with kind: pr-body, or one
-ADR's rejected option. Keep each bullet to one sentence. Omit the
-sub-section entirely if both sources are empty.>
+ADR's rejected option. Write in plain conversational English — "We
+could have X, but skipped it because Y" — not the terse "X: rejected — Y"
+shorthand. Assume the reader knows the product but not the deliberation.
+Omit the sub-section entirely if both sources are empty.>
 
 **Breaking Changes**
 
@@ -69,9 +71,15 @@ sub-section entirely if both sources are empty.>
 
 ## Tests
 
-<Grouped manual test cases. Each group has a bold title summarising
-the scenario; the steps are a nested checklist. Pre-tick boxes the
-author has already verified locally.>
+<Grouped manual test cases — things a human reviewer (or QA) needs to
+*run by hand* to gain confidence. Omit anything covered by automated
+tests in CI; the assumption is that CI gates the merge, so the Tests
+section is reserved for what CI can't catch (visual regressions,
+end-to-end user journeys, cross-environment behavior, etc.).
+
+All checkboxes are unchecked — the section is a TODO list for the
+reviewer to work through, not a record of the author's local
+verification.>
 
 **TC1: <scenario>**
 
@@ -81,13 +89,9 @@ author has already verified locally.>
 **TC2: <scenario>**
 
 - [ ] <step>
-
-## Review guide
-
-1. `<short-sha>` — <commit subject>
-2. `<short-sha>` — <commit subject>
-...
 ```
+
+The Review guide section (numbered commit list) is intentionally omitted from the body — GitHub's "Commits" tab already surfaces commits in order with subjects, so duplicating that information in the body wastes screen budget. Reviewers who want commit-by-commit reading use the tab directly.
 
 **Sourcing the Tests section.** Prefer the PRD's own Tests block if it is already in this TC-grouped format. Otherwise build TCs from the user-journey or acceptance-criteria sections of the PRD/issue, one TC per distinct scenario the change enables. If the PRD has no testable scenarios at all (rare — only for pure docs PRs), omit the section.
 
