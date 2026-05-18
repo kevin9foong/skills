@@ -68,16 +68,14 @@ Confirm the layout:
 - **Single-context** — one `CONTEXT.md` + `docs/adr/` at the repo root. Most repos are this.
 - **Multi-context** — `CONTEXT-MAP.md` at the root pointing to per-context `CONTEXT.md` files (typically a monorepo).
 
-**Section D — Review prep (commit style and breadcrumb convention).**
+**Section D — Review prep.**
 
-> Explainer: To make AI-written PRs reviewable, the implementation skills (`tdd` and successors) follow two project-level conventions: a **commit style** (so a reviewer can read commits one at a time and follow the change as a narrative) and a **breadcrumb convention** (the agent drops a small structured decision note into `.scratch/<feature>/decisions.md` each time it makes a non-obvious in-impl choice). The `prepare-for-review` skill then reads those breadcrumbs to populate the PR body and inline review comments — so reviewers see real rationale, captured at the moment of choice, instead of post-hoc reconstruction.
+> Explainer: The implementation skills (`tdd` and successors) follow two project conventions: a **commit style** (so reviewers can read commits one at a time) and a **breadcrumb convention** (the agent writes short decision notes to `.scratch/<feature>/decisions.md` as it works). `prepare-for-review` later turns those notes into PR-body bullets and inline review comments — so reviewers see real rationale captured at the moment of choice, not reconstructed afterwards.
 
-This section is bundled because the two settings are conceptually one piece (review prep) and almost always adopted together.
+Bundled as one section because the two settings are always adopted together. Skim the seed templates with the user; let them edit before writing:
 
-The seed templates are reasonable defaults. Skim them with the user; let them edit before writing. They are written to:
-
-- `docs/agents/commit-style.md` — house rule that each commit is one logical, independently reviewable change. Message grammar (Conventional Commits, etc.) is left for the user to fill in if their project mandates one.
-- `docs/agents/decisions-breadcrumb.md` — the breadcrumb schema (`kind: pr-body | inline`, `file`, `line`, `why`, `alternatives`) with one worked example for each `kind`.
+- `docs/agents/commit-style.md` — one logical change per commit.
+- `docs/agents/decisions-breadcrumb.md` — breadcrumb schema with examples.
 
 ### 3. Confirm and edit
 
