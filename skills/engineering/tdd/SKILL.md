@@ -44,7 +44,7 @@ RIGHT (vertical):
 
 ### 1. Planning
 
-When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching.
+When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching. Follow the project's commit style when committing through the loop, and the project's breadcrumb convention when capturing in-impl decisions for later review — both are documented in the project's agent docs if the project uses them.
 
 Before writing any code:
 
@@ -106,4 +106,16 @@ After all tests pass, look for [refactor candidates](refactoring.md):
 [ ] Test would survive internal refactor
 [ ] Code is minimal for this test
 [ ] No speculative features added
+[ ] Commit follows the project's commit style (one logical change per commit)
+[ ] Any non-obvious in-impl decision is captured as a breadcrumb
 ```
+
+## Breadcrumbs
+
+When you make a non-obvious decision mid-loop — picking one data structure over another, choosing an inclusive comparison, deviating from the obvious shape — append a short entry to the project's per-feature decisions file (typically `.scratch/<feature>/decisions.md`) following the project's breadcrumb convention. Capture the rationale at the moment you make the choice, not later from memory.
+
+Skip breadcrumbs for mechanical or obvious choices — the file is read by reviewers, and noise makes them stop reading. Big architectural calls belong in an ADR, not a breadcrumb.
+
+## Wrapping up
+
+When the loop is done and you're ready to open a PR, the next step is `/prepare-for-review` — it reads the breadcrumbs you've been dropping, plus any ADRs in the area, and assembles the PR body and inline review comments from real captured rationale rather than re-deriving from the diff.
