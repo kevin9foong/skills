@@ -16,8 +16,6 @@ Implementation skills (`tdd` and any successor impl loops) follow this conventio
 
 This project mandates Conventional Commits. Subject line under ~70 characters, imperative mood, body wrapped at ~72. Reference an issue if one exists.
 
-Replace this section with whatever format your project actually uses.
-
 ## When commits go wide
 
 Sometimes a single change is genuinely large and cannot be sliced (a generated file, a sweeping rename, a vendor drop). Land it as one commit and put the reason in the message body — reviewers can then skim past it confidently. Don't synthesise fake boundaries.
