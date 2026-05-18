@@ -12,3 +12,4 @@ Skills I use daily for code work.
 - **[to-prd](./to-prd/SKILL.md)** — Turn the current conversation context into a PRD and submit it as a GitHub issue.
 - **[zoom-out](./zoom-out/SKILL.md)** — Tell the agent to zoom out and give broader context or a higher-level perspective on an unfamiliar section of code.
 - **[prototype](./prototype/SKILL.md)** — Build a throwaway prototype to flesh out a design — either a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route.
+- **[prepare-for-review](./prepare-for-review/SKILL.md)** — Assemble a review-ready PR body and inline comments from the breadcrumbs the implementation loop captured, the ADRs in the touched area, and the originating PRD.
