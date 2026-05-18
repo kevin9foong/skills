@@ -74,7 +74,47 @@ copy its checklist. If not, omit this section.>
 ...
 ```
 
-(The Screenshots sub-section under Solution is added by the frontend branch of this skill — out of scope for this section. When that branch is implemented, it slots between **Alternatives considered** and **Breaking Changes**.)
+For frontend changes (detection + capture covered in step 3a below), the body gains a **Screenshots** sub-section slotted between **Alternatives considered** and **Breaking Changes**:
+
+```md
+**Screenshots**
+
+| Page | Before | After |
+| --- | --- | --- |
+| `/path` | ![before](<raw-url>) | ![after](<raw-url>) |
+
+<journey section only if the PRD has one>
+
+**User journey: `<journey name>`**
+
+1. ![step 1 — <caption>](<raw-url>)
+2. ![step 2 — <caption>](<raw-url>)
+```
+
+When no frontend changes are detected, the Screenshots sub-section is omitted entirely — no empty table, no "N/A".
+
+### 3a. Frontend detection and screenshot capture
+
+Run this between steps 3 and 4 only if the diff looks frontend.
+
+**Detection.** Apply a heuristic over the diff: does it touch any file with extension `.tsx`, `.ts`, `.jsx`, `.js`, `.vue`, `.svelte`, `.css`, `.scss`, or `.html` *inside a directory that looks frontend* (e.g. `app/`, `src/components/`, `src/pages/`, `web/`, `frontend/`, `client/`, depending on project layout). A backend TypeScript service that happens to have `.ts` files does NOT count as frontend.
+
+When the heuristic is ambiguous (e.g. a monorepo where the changed file's role is unclear), do not guess — ask the user "I see changes to `<files>`. Should I capture screenshots?".
+
+**Capture scope.** Before/after of every distinct page touched by the diff. If the originating PRD/issue has a "User journey" or equivalent step-by-step section, additionally capture each journey step in sequence.
+
+**Playwright script.** Write or update a Playwright spec at `.scratch/<feature>/screenshots.spec.ts`. Keep the file after the run — it can be re-used or extended on follow-up PRs to the same feature. If the file already exists from a previous run, merge new page captures into it rather than overwriting.
+
+The script:
+
+1. For each touched page: navigate to it on the previous commit's build, screenshot it as `before-<slug>.png`; then on `HEAD`'s build, screenshot it as `after-<slug>.png`. (If running both builds is impractical in the project, capture only the "after" state and note the limitation in the PR body.)
+2. For each journey step from the PRD: perform the step and screenshot as `journey-<n>-<slug>.png`.
+
+**Running.** Invoke via the project's local Playwright (`npx playwright test`). If `npx playwright --version` returns nonzero, do not auto-install — emit a one-line instruction (`npm i -D @playwright/test && npx playwright install`) and skip the Screenshots sub-section. Note the skip in the preview so the user knows what they're missing.
+
+**Committing images.** Write images to `.github/screenshots/<feature>/` on the working branch. Commit them in a single dedicated commit so the rest of the Review guide stays clean (e.g. `chore(screenshots): capture <feature> before/after`).
+
+**Embedding.** The PR body references each image via a raw GitHub URL of the form `https://raw.githubusercontent.com/<owner>/<repo>/<branch>/.github/screenshots/<feature>/<file>.png`. Use the branch name (not a SHA) so the images update if the branch is amended before merge.
 
 ### 4. Build the inline-comment list
 
@@ -116,4 +156,5 @@ No commit-discipline gate. If the commits are wide, the Review guide will reflec
 - It does not generate rationale by reading the diff and inventing alternatives. If breadcrumbs and ADRs are silent, the PR body is silent on those points too.
 - It does not rewrite or re-slice commits. Commit discipline lives upstream in `docs/agents/commit-style.md` and is followed by the implementation loop.
 - It does not auto-invoke after `tdd` finishes. `tdd` nudges the user; the user runs this skill when ready.
-- It does not handle frontend screenshots yet — that branch is tracked separately and slots into step 3 once implemented.
+- It does not auto-install Playwright. If the project does not already have it, the Screenshots sub-section is skipped and the user gets a one-line install instruction.
+- It does not rewrite image URLs to pin to a SHA. The raw GitHub URL points at the branch name, so amending the branch updates the embeds.
