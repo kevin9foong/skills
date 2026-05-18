@@ -1,6 +1,6 @@
 ---
 name: setup-matt-pocock-skills
-description: Sets up an `## Agent skills` block in AGENTS.md/CLAUDE.md and `docs/agents/` so the engineering skills know this repo's issue tracker (GitHub or local markdown), triage label vocabulary, and domain doc layout. Run before first use of `to-issues`, `to-prd`, `triage`, `diagnose`, `tdd`, `improve-codebase-architecture`, or `zoom-out` — or if those skills appear to be missing context about the issue tracker, triage labels, or domain docs.
+description: Sets up an `## Agent skills` block in AGENTS.md/CLAUDE.md and `docs/agents/` so the engineering skills know this repo's issue tracker (GitHub or local markdown), triage label vocabulary, domain doc layout, and review-prep conventions (commit style and breadcrumb schema). Run before first use of `to-issues`, `to-prd`, `triage`, `diagnose`, `tdd`, `improve-codebase-architecture`, `zoom-out`, or `prepare-for-review` — or if those skills appear to be missing context.
 disable-model-invocation: true
 ---
 
@@ -11,6 +11,7 @@ Scaffold the per-repo configuration that the engineering skills assume:
 - **Issue tracker** — where issues live (GitHub by default; local markdown is also supported out of the box)
 - **Triage labels** — the strings used for the five canonical triage roles
 - **Domain docs** — where `CONTEXT.md` and ADRs live, and the consumer rules for reading them
+- **Review prep** — the repo's commit style and breadcrumb convention, consumed by `tdd` (writer) and `prepare-for-review` (reader)
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
@@ -29,7 +30,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 
 ### 2. Present findings and ask
 
-Summarise what's present and what's missing. Then walk the user through the three decisions **one at a time** — present a section, get the user's answer, then move to the next. Don't dump all three at once.
+Summarise what's present and what's missing. Then walk the user through the four decisions **one at a time** — present a section, get the user's answer, then move to the next. Don't dump them all at once.
 
 Assume the user does not know what these terms mean. Each section starts with a short explainer (what it is, why these skills need it, what changes if they pick differently). Then show the choices and the default.
 
@@ -67,12 +68,23 @@ Confirm the layout:
 - **Single-context** — one `CONTEXT.md` + `docs/adr/` at the repo root. Most repos are this.
 - **Multi-context** — `CONTEXT-MAP.md` at the root pointing to per-context `CONTEXT.md` files (typically a monorepo).
 
+**Section D — Review prep (commit style and breadcrumb convention).**
+
+> Explainer: To make AI-written PRs reviewable, the implementation skills (`tdd` and successors) follow two project-level conventions: a **commit style** (so a reviewer can read commits one at a time and follow the change as a narrative) and a **breadcrumb convention** (the agent drops a small structured decision note into `.scratch/<feature>/decisions.md` each time it makes a non-obvious in-impl choice). The `prepare-for-review` skill then reads those breadcrumbs to populate the PR body and inline review comments — so reviewers see real rationale, captured at the moment of choice, instead of post-hoc reconstruction.
+
+This section is bundled because the two settings are conceptually one piece (review prep) and almost always adopted together.
+
+The seed templates are reasonable defaults. Skim them with the user; let them edit before writing. They are written to:
+
+- `docs/agents/commit-style.md` — house rule that each commit is one logical, independently reviewable change. Message grammar (Conventional Commits, etc.) is left for the user to fill in if their project mandates one.
+- `docs/agents/decisions-breadcrumb.md` — the breadcrumb schema (`kind: pr-body | inline`, `file`, `line`, `why`, `alternatives`) with one worked example for each `kind`.
+
 ### 3. Confirm and edit
 
 Show the user a draft of:
 
 - The `## Agent skills` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
-- The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`
+- The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/commit-style.md`, `docs/agents/decisions-breadcrumb.md`
 
 Let them edit before writing.
 
@@ -104,15 +116,21 @@ The block:
 ### Domain docs
 
 [one-line summary of layout — "single-context" or "multi-context"]. See `docs/agents/domain.md`.
+
+### Review prep
+
+Commit style and breadcrumb convention for review-ready PRs. See `docs/agents/commit-style.md` and `docs/agents/decisions-breadcrumb.md`.
 ```
 
-Then write the three docs files using the seed templates in this skill folder as a starting point:
+Then write the docs files using the seed templates in this skill folder as a starting point:
 
 - [issue-tracker-github.md](./issue-tracker-github.md) — GitHub issue tracker
 - [issue-tracker-gitlab.md](./issue-tracker-gitlab.md) — GitLab issue tracker
 - [issue-tracker-local.md](./issue-tracker-local.md) — local-markdown issue tracker
 - [triage-labels.md](./triage-labels.md) — label mapping
 - [domain.md](./domain.md) — domain doc consumer rules + layout
+- [commit-style.md](./commit-style.md) — house commit style for review-by-commit
+- [decisions-breadcrumb.md](./decisions-breadcrumb.md) — breadcrumb schema + examples
 
 For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description.
 
