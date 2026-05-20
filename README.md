@@ -8,7 +8,7 @@
   </a>
 </p>
 
-# Skills For Real Engineers and x-function staff
+# Skills For Real Engineers
 
 [![skills.sh](https://skills.sh/b/mattpocock/skills)](https://skills.sh/mattpocock/skills)
 
@@ -135,6 +135,16 @@ This is built in to every layer of these skills:
 - [`/zoom-out`](./skills/engineering/zoom-out/SKILL.md) tells the agent to explain code in the context of the whole system
 
 And crucially, [`/improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) helps you rescue a codebase that has become a ball of mud. I recommend running it on your codebase once every few days.
+
+### #5 Review capacity is the bottleneck
+
+**The Problem**: To increase shipping velocity, generating code with AI is only half the equation. Reviewing code is other half. 
+We can tackle this problem in 2 ways: 
+1. Use AI to review code which is the more commonly tackled approach (eg, Github Copilot, CodeRabbit). 
+2. Make code easier to review.
+
+**The Fix**: Reviewers face 3 challenges - understanding, verifying and evaluating the decisions. 
+Use review-by-commit, add verification metadata and tradeoff decisions to reduce the barriers for code reviewers to perform the above.  
 
 ### Summary
 
