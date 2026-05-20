@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, or asks for test-first development.
+description: Test-driven development with red-green-refactor loop, including frontend slices verified against a Figma design source via Storybook stories and an agent-browser visual gate. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, asks for test-first development, or wants to implement a UI/component/page from a Figma design.
 ---
 
 # Test-Driven Development
@@ -53,6 +53,7 @@ Before writing any code:
 - [ ] Identify opportunities for [deep modules](deep-modules.md) (small interface, deep implementation)
 - [ ] Design interfaces for [testability](interface-design.md)
 - [ ] List the behaviors to test (not implementation steps)
+- [ ] If the slice renders UI, route through [frontend-verification.md](frontend-verification.md) for the visual-cycle rules and the agent-browser-vs-design-source gate
 - [ ] Get user approval on the plan
 
 Ask: "What should the public interface look like? Which behaviors are most important to test?"
@@ -69,6 +70,8 @@ GREEN: Write minimal code to pass → test passes
 ```
 
 This is your tracer bullet - proves the path works end-to-end.
+
+For visual slices, the RED artifact may be a story or a dev-route render rather than a test, and GREEN is closed by the visual gate. Same vertical-slicing rule. See [frontend-verification.md](frontend-verification.md).
 
 ### 3. Incremental Loop
 
