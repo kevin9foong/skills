@@ -51,11 +51,9 @@ Mental alignment depends on shared vocabulary, so name things with terms the aut
 > Bad: issue (non-blocking): building on the now-resolved split disposition — this new judgement track asks the verifier to decide whether "the reasoning holds and the alternative is genuinely better," but that verifier still runs on Haiku (line 7).
 This is not ideal as it uses uncommon words eg, `now-resolved split disposition` and uses quotes "the reasoning holds and the alternative is genuinely better" which are painful to understand. 
 
-> Good: issue (non-blocking): verification for the judgment track uses a weaker model leading to poor performance; we should conditionally use a stronger model instead.
+> Good: issue (non-blocking): verification for the judgement track uses a weaker model leading to poor performance; we should conditionally use a stronger model instead.
 
 The only exception for using challenging words is if it is part of the project's vocabulary. 
-
-> Bad: 
 
 ### Use sections
 
@@ -94,11 +92,9 @@ Break up long sentences and lists (alternatives, benefits, trade-offs) with conc
 Suggestion: route verification by axis-type — keep Haiku for the correctness axes (Standards/Spec) as designed, but verify the judgement axes (Architecture/Divergent) on the review model, or skip independent verification for them and lean on "surface the strongest few." A one-line split by axis-type closes the gap the new disposition opened.
 
 **Good**: 
-Suggested Fix: Use different models based on the axis-type.
-For: 
+Suggested Fix: Use different models based on the axis-type. For: 
 - Correctness axes (Standards/Spec): Keep these on Haiku. 
-- Judgment axes (Architecture/Divergent): Upgrade these to stronger models for improve performance. 
-
+- Judgement axes (Architecture/Divergent): Use a stronger model (recommending the same model as the main /review agent) to improve performance. 
 Otherwise, consider trusting the original model's output and show the highest confidence findings to the user.
 
 This good example uses plain simple english and bullet points to make it more readable. 
