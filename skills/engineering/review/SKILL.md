@@ -14,8 +14,6 @@ The four axes:
 - **Architecture** — are there deepening opportunities in the changed code? (lens of `/improve-codebase-architecture`)
 - **Divergent** — for each change, was this the best option among the alternatives, given the PR's scope?
 
-The issue tracker should have been provided to you — run `/setup-matt-pocock-skills` if `docs/agents/issue-tracker.md` is missing.
-
 ## Process
 
 ### 1. Pin the fixed point
@@ -32,7 +30,7 @@ Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, again
 
 Look for the originating spec, in this order:
 
-1. Issue references in commit messages (`#123`, `Closes #45`, GitLab `!67`) — fetch via `docs/agents/issue-tracker.md`.
+1. Issue references in commit messages (`#123`, `Closes #45`, GitLab `!67`) - fetch via project's issue tracker.
 2. A path the user passed as an argument.
 3. A PRD/spec file under `docs/`, `specs/`, or `.scratch/` matching the branch or feature.
 4. If nothing is found, ask. If there's no spec, the **Spec** axis skips and reports "no spec available".
