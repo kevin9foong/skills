@@ -38,7 +38,7 @@ If an axis has no surviving finding, report it clean.
 - Non-committed code. 
 - Pre-existing issues on lines the PR didn't touch.
 - Looks like a bug but isn't.
-- Anything a linter, typechecker, formatter, or compiler catches — assume CI runs these.
+- Anything a linter, typechecker, formatter, or compiler catches.
 - Issues a standards doc names but the code explicitly silences (e.g. a lint-ignore with reason).
 - Functionality changes that are clearly intentional, part of the broader change.
 
