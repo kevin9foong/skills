@@ -4,7 +4,10 @@ Adapted from Anthropic's `/code-review`. Findings the user dismisses cost more c
 
 ## How to run it
 
-**One verifier per finding, on Haiku, in parallel** (`Agent(..., model: "haiku")`; in a Workflow, `agent(prompt, {model: "haiku"})`). Each gets only the diff, the one finding, and the standards-file list — **not** the originating axis's reasoning (the finder is the worst judge of its own finding). This stays cheap only because it's Haiku + single-finding + parallel — don't promote it to the review model or hand one agent all findings.
+**One verifier per finding, in parallel — routed by axis-type.** Each gets only the diff, the one finding, and the standards-file list — **not** the originating axis's reasoning (the finder is the worst judge of its own finding).
+
+- **Correctness axes (Standards/Spec)** → verify on **Haiku** (`Agent(..., model: "haiku")`; in a Workflow, `agent(prompt, {model: "haiku"})`). Locating a bug against the rubric is cheap, and stays cheap only because it's Haiku + single-finding + parallel — don't hand one agent all findings.
+- **Judgement axes (Architecture/Divergent)** → verify on **the review model**.
 
 The verifier:
 
