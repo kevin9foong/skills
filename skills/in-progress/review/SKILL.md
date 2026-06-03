@@ -1,16 +1,18 @@
 ---
 name: review
-description: Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to "review since X".
+description: Review the changes since a fixed point (commit, branch, tag, or merge-base) along four independent axes — Standards, Spec, Architecture, and Divergent design — each run as a parallel sub-agent so contexts stay clean, then verified against false positives and reported side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to "review since X".
 ---
 
 # Review
 
-Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
+Multi-axis review of the diff between `HEAD` and a fixed point the user supplies. Each axis runs as its own **parallel sub-agent** so they don't pollute each other's context. Findings are then verified against false positives and aggregated **without merging the axes** — the user evaluates each independently.
 
-- **Standards** — does the code conform to this repo's documented coding standards?
+The four axes:
+
+- **Standards** — does the code follow the repo's documented standards? And are those standards themselves sound, or tech debt worth flagging?
 - **Spec** — does the code faithfully implement the originating issue / PRD / spec?
-
-Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings.
+- **Architecture** — are there deepening opportunities in the changed code? (lens of `/improve-codebase-architecture`)
+- **Divergent** — for each change, was this the best option among the alternatives, given the PR's scope?
 
 The issue tracker should have been provided to you — run `/setup-matt-pocock-skills` if `docs/agents/issue-tracker.md` is missing.
 
@@ -20,59 +22,56 @@ The issue tracker should have been provided to you — run `/setup-matt-pocock-s
 
 Whatever the user said is the fixed point — a commit SHA, branch name, tag, `main`, `HEAD~5`, etc. Don't be opinionated; pass it through. If they didn't specify one, ask: "Review against what — a branch, a commit, or `main`?" Don't proceed until you have it.
 
-Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
+Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, against the merge-base). Note the commit list via `git log <fixed-point>..HEAD --oneline`.
 
 ### 2. Identify the spec source
 
 Look for the originating spec, in this order:
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch via the workflow in `docs/agents/issue-tracker.md`.
+1. Issue references in commit messages (`#123`, `Closes #45`, GitLab `!67`) — fetch via `docs/agents/issue-tracker.md`.
 2. A path the user passed as an argument.
-3. A PRD/spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
-4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
+3. A PRD/spec file under `docs/`, `specs/`, or `.scratch/` matching the branch or feature.
+4. If nothing is found, ask. If there's no spec, the **Spec** axis skips and reports "no spec available".
 
 ### 3. Identify the standards sources
 
-Anything in the repo that documents how code should be written. Common locations:
+Anything documenting how code should be written: `CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md`, `CONTEXT.md` / `CONTEXT-MAP.md`, `docs/adr/`, `STYLE.md` / `STANDARDS.md`, and config files (`eslint.config.*`, `biome.json`, `tsconfig.json` — note them but don't re-check what tooling enforces). Collect the file list; the **Standards** sub-agent reads them.
 
-- `CLAUDE.md`, `AGENTS.md`
-- `CONTRIBUTING.md`
-- `CONTEXT.md`, `CONTEXT-MAP.md`, per-context `CONTEXT.md` files
-- `docs/adr/` (architectural decisions are standards)
-- `.editorconfig`, `eslint.config.*`, `biome.json`, `prettier.config.*`, `tsconfig.json` (machine-enforced standards — note them but don't re-check what tooling already checks)
-- Any `STYLE.md`, `STANDARDS.md`, `STYLEGUIDE.md`, or similar at the repo root or under `docs/`
+### 4. Triage, then spawn the axis sub-agents in parallel
 
-Collect the list of files. The **Standards** sub-agent will read them.
+**Triage first (one judgment call, no formulas):** is there anything substantive to reason about?
 
-### 4. Spawn both sub-agents in parallel
+- Unambiguously cosmetic — docs/comments/formatting only, a version bump, a generated-file change → run **Standards + Spec** only; skip Architecture and Divergent. Note that you did.
+- Clearly automated or no-op (e.g. a dependabot bump that CI already gates) → skip the review with a one-line "nothing substantive to review."
+- Anything else, or any doubt → run **all four**. Bias toward running more: a one-line change can be load-bearing (a tweak to a security check is exactly the `isV4` case). Collapse only when it's obviously just cosmetic.
 
-Send a single message with two `Agent` tool calls. Use the `general-purpose` subagent for both.
+Then send a single message with one `Agent` call per applicable axis (`general-purpose` subagent for all). **Don't read the diff or docs yourself** — stay a thin dispatcher. Tell each sub-agent to read its own brief file and follow it, passing only the diff command, commit list, and the source paths it needs:
 
-**Standards sub-agent prompt** — include:
+- **Standards** → `axes/standards.md` (+ the standards-source paths from step 3)
+- **Spec** → `axes/spec.md` (+ the spec path) — skip if no spec exists; note it in the report
+- **Architecture** → `axes/architecture.md`
+- **Divergent** → `axes/divergent.md`
 
-- The full diff command and commit list.
-- The list of standards-source files you found in step 3.
-- The brief: "Read the standards docs. Then read the diff. Report — per file/hunk where relevant — every place the diff violates a documented standard. Cite the standard (file + the rule). Distinguish hard violations from judgement calls. Skip anything tooling enforces. Under 400 words."
+Each brief caps its report at ~400 words and ends by asking for a confidence score + evidence per finding, so the filter in step 5 has what it needs.
 
-**Spec sub-agent prompt** — include:
+### 5. Verify each finding — parallel, on Haiku
 
-- The diff command and commit list.
-- The path or fetched contents of the spec.
-- The brief: "Read the spec. Then read the diff. Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
+Collect the findings the axis agents returned. Spawn **one verification sub-agent per finding, on Haiku, in a single parallel batch** (`Agent(..., model: "haiku")`). Each gets only the diff, its one finding, and the standards-file list — never the finder's reasoning. It returns a 0–100 confidence score + one line of evidence. Then **dedup**: merge findings hitting the same file+line into one (keep the highest score, cite both axes), and **drop everything below 80**. Full rubric and the always-drop list: [FILTER.md](FILTER.md). This gate is what makes autonomous posting safe — a finding the author dismisses costs more credibility than a missed nit.
 
-If the spec is missing, skip the Spec sub-agent and note this in the final report.
+### 6. Aggregate
 
-### 5. Aggregate
+Present each surviving finding under its axis heading (`## Standards`, `## Spec`, `## Architecture`, `## Divergent`), lightly cleaned. Do **not** merge or rerank *across* axes — the separation is the point (the file+line dedup in step 5 is the only cross-axis merge). End with a one-line summary: surviving findings per axis, the single worst issue, and how many were dropped below threshold (no silent truncation).
 
-Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings — the two axes are deliberately separate so the user can see them independently.
+### 7. (Optional) Post as PR comments
 
-End with a one-line summary: total findings per axis, and the worst single issue (if any) flagged.
+Only if the user asked to post. One comment per surviving finding, anchored inline on its line(s) via `gh`; add a summary comment only if it adds value. **If nothing survived, say so — don't manufacture nits.** **If the PR was already reviewed by this tool, re-evaluate against the prior comments, the author's replies, and commits pushed since — post only the delta, never a repost.** Skip closed/merged/draft PRs. Format, labels, AI disclaimer, empty-review path, and re-review logic: [COMMENTS.md](COMMENTS.md).
 
-## Why two axes
+## Why separate axes
 
-A change can pass one axis and fail the other:
+A change can pass one axis and fail another:
 
-- Code that follows every standard but implements the wrong thing → **Standards pass, Spec fail.**
-- Code that does exactly what the issue asked but breaks the project's conventions → **Spec pass, Standards fail.**
+- Follows every standard but implements the wrong thing → **Standards pass, Spec fail.**
+- Does exactly what the issue asked but breaks conventions → **Spec pass, Standards fail.**
+- Correct and conventional, but a shallow module or a worse-than-the-alternative choice → caught only by **Architecture** / **Divergent.**
 
-Reporting them separately stops one axis from masking the other.
+Reporting them separately stops one axis from masking another.
