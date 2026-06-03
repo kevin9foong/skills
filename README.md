@@ -167,6 +167,7 @@ Skills I use daily for code work.
 - **[zoom-out](./skills/engineering/zoom-out/SKILL.md)** — Tell the agent to zoom out and give broader context or a higher-level perspective on an unfamiliar section of code.
 - **[prototype](./skills/engineering/prototype/SKILL.md)** — Build a throwaway prototype to flesh out a design — either a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route.
 - **[prepare-for-review](./skills/engineering/prepare-for-review/SKILL.md)** — Assemble a review-ready PR body and inline comments from the breadcrumbs the implementation loop captured, the ADRs in the touched area, and the originating PRD.
+- **[review](./skills/engineering/review/SKILL.md)** — Review changes since a fixed point along four independent axes (Standards, Spec, Architecture, Divergent), each in a parallel sub-agent, then verified against false positives and reported side by side.
 
 ### Productivity
 
