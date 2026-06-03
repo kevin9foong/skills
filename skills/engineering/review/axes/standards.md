@@ -13,6 +13,6 @@ Two passes:
 
 **Question the standard before enforcing it.** Prioritise documented standards, but if a documented rule or an established repo pattern is itself a hack, workaround, or clearly incorrect practice, say so rather than holding the diff to it. A standard that is tech debt should be flagged as tech debt, not used as a stick. When the diff *breaks* from a bad pattern deliberately, that's a point in its favour — note it.
 
-Distinguish hard violations from judgement calls. Skip anything a linter, formatter, or typechecker enforces. Under 400 words.
+Distinguish hard violations from judgement calls. Skip anything a linter, formatter, or typechecker enforces.
 
-For each finding: cite the exact `file:line` and quote the line(s) of code it concerns; state your confidence (0–100) that it's a real, in-scope issue, and one line of evidence. Cross-cutting findings cite a primary `file:line` plus the others; a finding about an *absence* (a pattern that should exist but doesn't) anchors to the nearest relevant line, noted as such. A finding with no locatable anchor will be dropped. Do not pad the list — a short list of verified, located findings beats a long list of maybes.
+First read [_contract.md](_contract.md) and follow it for report length and finding format.
